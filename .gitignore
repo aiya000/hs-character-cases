@@ -27,4 +27,5 @@ cabal.project.local~
 .ghc.environment.*
 
 # End of https://www.gitignore.io/api/haskell
-hs-character-cases.cabal
+
+character-cases.cabal
