@@ -66,6 +66,7 @@ dependencies:
   - containers
   - here
   - megaparsec
+  - prettyprinter
   - template-haskell
 
 library:
