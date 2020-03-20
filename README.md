@@ -132,10 +132,9 @@ Please also see doctests of modules.
 
 And we can use it as parser combinators.
 
-Please see modules.
+Please see modules and documents.
 
-- [Data.Char.Cases](https://github.com/aiya000/hs-character-cases/blob/master/src/Data/Char/Cases.hs)
-- [Data.String.Cases](https://github.com/aiya000/hs-character-cases/blob/master/src/Data/String/Cases.hs)
+- [character-cases - Hackage](https://hackage.haskell.org/package/character-cases)
 
 - - - - -
 
