@@ -1,0 +1,83 @@
+name: hs-character-cases
+version: 0.1.0.0
+github: "aiya000/hs-character-cases"
+license: MIT
+author: "aiya000"
+maintainer: "aiya000.develop@gmail.com"
+copyright: "aiya000"
+synopsis: Exposes subspecies types of Char. And naming cases. e.g. meaning of [a-z], [A-Z], [0-9], PascalCase, camelCase, and sneak_case.
+category: Simple
+description: Please see https://github.com/aiya000/hs-character-cases#README.md
+
+ghc-options:
+  - -Wall
+  - -Wcompat
+  - -Wincomplete-record-updates
+  - -Wincomplete-uni-patterns
+  - -Wredundant-constraints
+  - -fprint-explicit-kinds
+  - -fprint-potential-instances
+
+default-extensions:
+  - AutoDeriveTypeable
+  - BangPatterns
+  - BinaryLiterals
+  - BlockArguments
+  - ConstraintKinds
+  - DataKinds
+  - DefaultSignatures
+  - DeriveDataTypeable
+  - DeriveFoldable
+  - DeriveFunctor
+  - DeriveGeneric
+  - DeriveTraversable
+  - DoAndIfThenElse
+  - DuplicateRecordFields
+  - EmptyDataDecls
+  - ExistentialQuantification
+  - FlexibleContexts
+  - FlexibleInstances
+  - FunctionalDependencies
+  - GADTs
+  - GeneralizedNewtypeDeriving
+  - InstanceSigs
+  - KindSignatures
+  - LambdaCase
+  - MonadFailDesugaring
+  - MultiParamTypeClasses
+  - MultiWayIf
+  - NamedFieldPuns
+  - OverloadedStrings
+  - PartialTypeSignatures
+  - PatternGuards
+  - PolyKinds
+  - RankNTypes
+  - RecordWildCards
+  - ScopedTypeVariables
+  - StandaloneDeriving
+  - TupleSections
+  - TypeApplications
+  - TypeFamilies
+  - TypeSynonymInstances
+  - ViewPatterns
+
+dependencies:
+  - base >= 4.7 && < 5
+  - containers
+  - here
+  - megaparsec
+  - template-haskell
+
+library:
+  source-dirs: src
+
+tests:
+  tasty:
+    main: Spec.hs
+    source-dirs: test
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - hs-character-cases
