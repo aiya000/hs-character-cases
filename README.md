@@ -13,6 +13,25 @@ A Haskell library for subspecies types of Char, and naming cases.
     - camelCase `[a-zA-Z][a-zA-Z0-9]*`
     - sneak_case `[a-zA-Z_][a-zA-Z0-9_]*`
 
+```haskell
+data UpperChar = A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z
+  deriving (Show, Eq, Ord)
+
+data LowerChar = A_ | B_ | C_ | D_ | E_ | F_ | G_ | H_ | I_ | J_ | K_ | L_ | M_ | N_ | O_ | P_ | Q_ | R_ | S_ | T_ | U_ | V_ | W_ | X_ | Y_ | Z_
+  deriving (Show, Eq, Ord)
+
+data DigitChar = D0 | D1 | D2 | D3 | D4 | D5 | D6 | D7 | D8 | D9
+  deriving (Show, Eq, Ord)
+
+data AlphaChar = AlphaLower LowerChar
+               | AlphaUpper UpperChar
+  deriving (Show, Eq, Ord)
+
+data AlphaNumChar = AlphaNumAlpha AlphaChar
+                  | AlphaNumDigit DigitChar
+  deriving (Show, Eq, Ord)
+```
+
 ## Why we use this?
 
 I'm developping a software, that is a program compiler.
