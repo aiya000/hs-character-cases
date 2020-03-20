@@ -13,6 +13,9 @@ import Language.Haskell.TH
 import Language.Haskell.TH.Quote (QuasiQuoter(..))
 import qualified Text.Megaparsec as P
 
+-- $setup
+-- >>> :set -XQuasiQuotes
+
 -- | Non empty PascalCase names "[A-Z][a-zA-Z0-9]*"
 data Pascal = Pascal UpperChar [AlphaNumChar]
   deriving (Show, Eq)
