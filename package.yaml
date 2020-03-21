@@ -1,13 +1,13 @@
 name: character-cases
-version: 0.1.0.0
+version: 0.1.0.1
 github: "aiya000/hs-character-cases"
 license: MIT
 author: "aiya000"
 maintainer: "aiya000.develop@gmail.com"
 copyright: "aiya000"
-synopsis: Exposes subspecies types of Char. And naming cases. e.g. meaning of [a-z], [A-Z], [0-9], PascalCase, camelCase, and sneak_case.
+synopsis: Exposes subspecies types of Char. And naming cases.
 category: Simple
-description: Please see https://github.com/aiya000/hs-character-cases#README.md
+description: e.g. meaning of [a-z], [A-Z], [0-9], PascalCase, camelCase, and snake_case. Please see https://github.com/aiya000/hs-character-cases#README.md
 
 ghc-options:
   - -Wall
@@ -19,7 +19,6 @@ ghc-options:
   - -fprint-potential-instances
 
 default-extensions:
-  - AutoDeriveTypeable
   - BangPatterns
   - BinaryLiterals
   - BlockArguments
@@ -43,7 +42,6 @@ default-extensions:
   - InstanceSigs
   - KindSignatures
   - LambdaCase
-  - MonadFailDesugaring
   - MultiParamTypeClasses
   - MultiWayIf
   - NamedFieldPuns
