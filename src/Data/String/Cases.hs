@@ -149,14 +149,14 @@ data Snake = Snake SnakeHeadChar [SnakeChar]
   deriving (Show, Eq)
 
 instance Pretty Snake where
-  pretty = String.fromString . unSnakeCase
+  pretty = String.fromString . unSnake
 
-unSnakeCase :: Snake -> String
-unSnakeCase (Snake x xs) =
+unSnake :: Snake -> String
+unSnake (Snake x xs) =
   unSnakeHeadChar x : map unSnakeChar xs
 
-parseSnakeCase :: CodeParsing m => m Snake
-parseSnakeCase =
+parseSnake :: CodeParsing m => m Snake
+parseSnake =
   Snake <$>
   snakeHeadChar <*>
   P.many snakeChar
