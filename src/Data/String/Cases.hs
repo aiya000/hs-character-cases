@@ -144,37 +144,37 @@ camelQ = QuasiQuoter
       pure $ ConE (mkName "Camel") `AppE` z `AppE` ListE zs
 
 
--- | Non empty sneak_case names "[a-zA-Z_][a-zA-Z0-9_]*"
-data Sneak = Sneak SneakHeadChar [SneakChar]
+-- | Non empty snake_case names "[a-zA-Z_][a-zA-Z0-9_]*"
+data Snake = Snake SnakeHeadChar [SnakeChar]
   deriving (Show, Eq)
 
-instance Pretty Sneak where
-  pretty = String.fromString . unSneakCase
+instance Pretty Snake where
+  pretty = String.fromString . unSnakeCase
 
-unSneakCase :: Sneak -> String
-unSneakCase (Sneak x xs) =
-  unSneakHeadChar x : map unSneakChar xs
+unSnakeCase :: Snake -> String
+unSnakeCase (Snake x xs) =
+  unSnakeHeadChar x : map unSnakeChar xs
 
-parseSneakCase :: CodeParsing m => m Sneak
-parseSneakCase =
-  Sneak <$>
-  sneakHeadChar <*>
-  P.many sneakChar
+parseSnakeCase :: CodeParsing m => m Snake
+parseSnakeCase =
+  Snake <$>
+  snakeHeadChar <*>
+  P.many snakeChar
 
 -- |
 -- Simular to 'nonEmptyQ',
--- but naming outsides of 'Sneak' will be rejected.
+-- but naming outsides of 'Snake' will be rejected.
 --
--- >>> [sneakQ|foo_bar|]
--- Sneak (SneakHeadAlpha (AlphaLower F_)) [SneakAlphaNum (AlphaNumAlpha (AlphaLower O_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower O_)),SneakUnderscore,SneakAlphaNum (AlphaNumAlpha (AlphaLower B_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower A_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower R_))]
+-- >>> [snakeQ|foo_bar|]
+-- Snake (SnakeHeadAlpha (AlphaLower F_)) [SnakeAlphaNum (AlphaNumAlpha (AlphaLower O_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower O_)),SnakeUnderscore,SnakeAlphaNum (AlphaNumAlpha (AlphaLower B_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower A_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower R_))]
 --
--- >>> [sneakQ|__constructor|]
--- Sneak SneakHeadUnderscore [SneakUnderscore,SneakAlphaNum (AlphaNumAlpha (AlphaLower C_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower O_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower N_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower S_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower T_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower R_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower U_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower C_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower T_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower O_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower R_))]
+-- >>> [snakeQ|__constructor|]
+-- Snake SnakeHeadUnderscore [SnakeUnderscore,SnakeAlphaNum (AlphaNumAlpha (AlphaLower C_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower O_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower N_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower S_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower T_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower R_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower U_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower C_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower T_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower O_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower R_))]
 --
--- >>> [sneakQ|FOO_MEE_9|]
--- Sneak (SneakHeadAlpha (AlphaUpper F)) [SneakAlphaNum (AlphaNumAlpha (AlphaUpper O)),SneakAlphaNum (AlphaNumAlpha (AlphaUpper O)),SneakUnderscore,SneakAlphaNum (AlphaNumAlpha (AlphaUpper M)),SneakAlphaNum (AlphaNumAlpha (AlphaUpper E)),SneakAlphaNum (AlphaNumAlpha (AlphaUpper E)),SneakUnderscore,SneakAlphaNum (AlphaNumDigit D9)]
-sneakQ :: QuasiQuoter
-sneakQ = QuasiQuoter
+-- >>> [snakeQ|FOO_MEE_9|]
+-- Snake (SnakeHeadAlpha (AlphaUpper F)) [SnakeAlphaNum (AlphaNumAlpha (AlphaUpper O)),SnakeAlphaNum (AlphaNumAlpha (AlphaUpper O)),SnakeUnderscore,SnakeAlphaNum (AlphaNumAlpha (AlphaUpper M)),SnakeAlphaNum (AlphaNumAlpha (AlphaUpper E)),SnakeAlphaNum (AlphaNumAlpha (AlphaUpper E)),SnakeUnderscore,SnakeAlphaNum (AlphaNumDigit D9)]
+snakeQ :: QuasiQuoter
+snakeQ = QuasiQuoter
   { quoteExp  = expQ
   , quotePat  = error "not supported"
   , quoteType = error "not supported"
@@ -182,11 +182,11 @@ sneakQ = QuasiQuoter
   }
   where
     expQ :: String -> Q Exp
-    expQ [] = fail "sneakQ required a non empty string, but the empty string is specified."
+    expQ [] = fail "snakeQ required a non empty string, but the empty string is specified."
     expQ (x : xs) = do
-      z <- (quoteExp sneakHeadCharQ) [x]
-      zs <- mapM (quoteExp sneakCharQ) $ map (: []) xs
-      pure $ ConE (mkName "Sneak") `AppE` z `AppE` ListE zs
+      z <- (quoteExp snakeHeadCharQ) [x]
+      zs <- mapM (quoteExp snakeCharQ) $ map (: []) xs
+      pure $ ConE (mkName "Snake") `AppE` z `AppE` ListE zs
 
 
 -- | Non empty "veryflatten" names [a-z]+

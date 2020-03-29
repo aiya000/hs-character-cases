@@ -290,40 +290,40 @@ digitCharQ = QuasiQuoter
 -- |
 -- [a-zA-Z0-9_]
 --
--- Please see 'Sneak'.
-data SneakChar = SneakUnderscore -- ^ _
-               | SneakAlphaNum AlphaNumChar -- ^ [a-zA-Z0-9]
+-- Please see 'Snake'.
+data SnakeChar = SnakeUnderscore -- ^ _
+               | SnakeAlphaNum AlphaNumChar -- ^ [a-zA-Z0-9]
   deriving (Show, Eq)
 
-unSneakChar :: SneakChar -> Char
-unSneakChar SneakUnderscore = '_'
-unSneakChar (SneakAlphaNum x) = alphaNumToChar x
+unSnakeChar :: SnakeChar -> Char
+unSnakeChar SnakeUnderscore = '_'
+unSnakeChar (SnakeAlphaNum x) = alphaNumToChar x
 
-sneakChar :: CodeParsing m => m SneakChar
-sneakChar =
-  SneakUnderscore <$ P.char '_' <|>
-  SneakAlphaNum <$> alphaNumChar
+snakeChar :: CodeParsing m => m SnakeChar
+snakeChar =
+  SnakeUnderscore <$ P.char '_' <|>
+  SnakeAlphaNum <$> alphaNumChar
 
-charToSneak :: Char -> Maybe SneakChar
-charToSneak x = P.parseMaybe sneakChar [x]
+charToSnake :: Char -> Maybe SnakeChar
+charToSnake x = P.parseMaybe snakeChar [x]
 
 -- |
 -- Extracts a Char of [a-zA-Z0-9_].
 -- Also throws compile error if non [a-zA-Z0-9_] is passed.
 --
--- >>> [sneakCharQ|x|]
--- SneakAlphaNum (AlphaNumAlpha (AlphaLower X_))
+-- >>> [snakeCharQ|x|]
+-- SnakeAlphaNum (AlphaNumAlpha (AlphaLower X_))
 --
--- >>> [sneakCharQ|X|]
--- SneakAlphaNum (AlphaNumAlpha (AlphaUpper X))
+-- >>> [snakeCharQ|X|]
+-- SnakeAlphaNum (AlphaNumAlpha (AlphaUpper X))
 --
--- >>> [sneakCharQ|_|]
--- SneakUnderscore
+-- >>> [snakeCharQ|_|]
+-- SnakeUnderscore
 --
--- >>> [sneakCharQ|9|]
--- SneakAlphaNum (AlphaNumDigit D9)
-sneakCharQ :: QuasiQuoter
-sneakCharQ = QuasiQuoter
+-- >>> [snakeCharQ|9|]
+-- SnakeAlphaNum (AlphaNumDigit D9)
+snakeCharQ :: QuasiQuoter
+snakeCharQ = QuasiQuoter
   { quoteExp  = expQ
   , quotePat  = error "not supported"
   , quoteType = error "not supported"
@@ -331,52 +331,52 @@ sneakCharQ = QuasiQuoter
   }
   where
     expQ :: String -> Q Exp
-    expQ [] = fail "sneakCharQ required a Char, but nothign is specified."
+    expQ [] = fail "snakeCharQ required a Char, but nothign is specified."
 
-    expQ (x : []) = case charToSneak x of
-      Nothing -> fail [i|'${x}' is not a SneakChar.|]
-      Just SneakUnderscore ->
-        conE $ mkName "SneakUnderscore"
-      Just (SneakAlphaNum _) ->
-        (ConE (mkName "SneakAlphaNum") `AppE`) <$> (quoteExp alphaNumCharQ) [x]
+    expQ (x : []) = case charToSnake x of
+      Nothing -> fail [i|'${x}' is not a SnakeChar.|]
+      Just SnakeUnderscore ->
+        conE $ mkName "SnakeUnderscore"
+      Just (SnakeAlphaNum _) ->
+        (ConE (mkName "SnakeAlphaNum") `AppE`) <$> (quoteExp alphaNumCharQ) [x]
 
-    expQ xs@(_ : _) = fail [i|sneakCharQ required a Char, but a String is specified: ${xs}|]
+    expQ xs@(_ : _) = fail [i|snakeCharQ required a Char, but a String is specified: ${xs}|]
 
 
 -- |
 -- [a-zA-Z_]
 --
--- Please see 'Sneak'.
-data SneakHeadChar = SneakHeadUnderscore
-                   | SneakHeadAlpha AlphaChar
+-- Please see 'Snake'.
+data SnakeHeadChar = SnakeHeadUnderscore
+                   | SnakeHeadAlpha AlphaChar
   deriving (Show, Eq)
 
-unSneakHeadChar :: SneakHeadChar -> Char
-unSneakHeadChar SneakHeadUnderscore = '_'
-unSneakHeadChar (SneakHeadAlpha x) = alphaToChar x
+unSnakeHeadChar :: SnakeHeadChar -> Char
+unSnakeHeadChar SnakeHeadUnderscore = '_'
+unSnakeHeadChar (SnakeHeadAlpha x) = alphaToChar x
 
-sneakHeadChar :: CodeParsing m => m SneakHeadChar
-sneakHeadChar =
-  SneakHeadUnderscore <$ P.char '_' <|>
-  SneakHeadAlpha <$> alphaChar
+snakeHeadChar :: CodeParsing m => m SnakeHeadChar
+snakeHeadChar =
+  SnakeHeadUnderscore <$ P.char '_' <|>
+  SnakeHeadAlpha <$> alphaChar
 
-charToSneakHead :: Char -> Maybe SneakHeadChar
-charToSneakHead x = P.parseMaybe sneakHeadChar [x]
+charToSnakeHead :: Char -> Maybe SnakeHeadChar
+charToSnakeHead x = P.parseMaybe snakeHeadChar [x]
 
 -- |
 -- Extracts a Char of [a-zA-Z_].
 -- Also throws compile error if non [a-zA-Z_] is passed.
 --
--- >>> [sneakHeadCharQ|x|]
--- SneakHeadAlpha (AlphaLower X_)
+-- >>> [snakeHeadCharQ|x|]
+-- SnakeHeadAlpha (AlphaLower X_)
 --
--- >>> [sneakHeadCharQ|X|]
--- SneakHeadAlpha (AlphaUpper X)
+-- >>> [snakeHeadCharQ|X|]
+-- SnakeHeadAlpha (AlphaUpper X)
 --
--- >>> [sneakHeadCharQ|_|]
--- SneakHeadUnderscore
-sneakHeadCharQ :: QuasiQuoter
-sneakHeadCharQ = QuasiQuoter
+-- >>> [snakeHeadCharQ|_|]
+-- SnakeHeadUnderscore
+snakeHeadCharQ :: QuasiQuoter
+snakeHeadCharQ = QuasiQuoter
   { quoteExp  = expQ
   , quotePat  = error "not supported"
   , quoteType = error "not supported"
@@ -384,13 +384,13 @@ sneakHeadCharQ = QuasiQuoter
   }
   where
     expQ :: String -> Q Exp
-    expQ [] = fail "sneakHeadCharQ required a Char, but nothign is specified."
+    expQ [] = fail "snakeHeadCharQ required a Char, but nothign is specified."
 
-    expQ (x : []) = case charToSneakHead x of
-      Nothing -> fail [i|'${x}' is not a SneakHeadChar.|]
-      Just SneakHeadUnderscore ->
-        conE $ mkName "SneakHeadUnderscore"
-      Just (SneakHeadAlpha _) ->
-        (ConE (mkName "SneakHeadAlpha") `AppE`) <$> (quoteExp alphaCharQ) [x]
+    expQ (x : []) = case charToSnakeHead x of
+      Nothing -> fail [i|'${x}' is not a SnakeHeadChar.|]
+      Just SnakeHeadUnderscore ->
+        conE $ mkName "SnakeHeadUnderscore"
+      Just (SnakeHeadAlpha _) ->
+        (ConE (mkName "SnakeHeadAlpha") `AppE`) <$> (quoteExp alphaCharQ) [x]
 
-    expQ xs@(_ : _) = fail [i|sneakHeadCharQ required a Char, but a String is specified: ${xs}|]
+    expQ xs@(_ : _) = fail [i|snakeHeadCharQ required a Char, but a String is specified: ${xs}|]
