@@ -11,7 +11,7 @@ A Haskell library for subspecies types of Char, and naming cases.
 - Naming cases (String like)
     - PascalCase `[A-Z][A-Za-z0-9]*`
     - camelCase `[a-zA-Z][a-zA-Z0-9]*`
-    - sneak_case `[a-zA-Z_][a-zA-Z0-9_]*`
+    - snake_case `[a-zA-Z_][a-zA-Z0-9_]*`
 
 ```haskell
 data UpperChar = A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z
@@ -68,8 +68,8 @@ AlphaNumAlpha (AlphaLower X_)
 >>> [alphaNumCharQ|0|]
 AlphaNumDigit D0
 
->>> [sneakCharQ|_|]
-SneakUnderscore
+>>> [snakeCharQ|_|]
+SnakeUnderscore
 ```
 
 Naming cases
@@ -90,12 +90,12 @@ NonEmpty 'B' "ar"
 >>> [camelQ|Pascal|]
 "Pascal"
 
->>> [sneakQ|foo_bar|]
-Sneak (SneakHeadAlpha (AlphaLower F_)) [SneakAlphaNum (AlphaNumAlpha (AlphaLower O_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower O_)),SneakUnderscore,SneakAlphaNum (AlphaNumAlpha (AlphaLower B_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower A_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower R_))]
->>> [sneakQ|__constructor|]
-Sneak SneakHeadUnderscore [SneakUnderscore,SneakAlphaNum (AlphaNumAlpha (AlphaLower C_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower O_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower N_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower S_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower T_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower R_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower U_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower C_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower T_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower O_)),SneakAlphaNum (AlphaNumAlpha (AlphaLower R_))]
->>> [sneakQ|FOO_MEE_9|]
-Sneak (SneakHeadAlpha (AlphaUpper F)) [SneakAlphaNum (AlphaNumAlpha (AlphaUpper O)),SneakAlphaNum (AlphaNumAlpha (AlphaUpper O)),SneakUnderscore,SneakAlphaNum (AlphaNumAlpha (AlphaUpper M)),SneakAlphaNum (AlphaNumAlpha (AlphaUpper E)),SneakAlphaNum (AlphaNumAlpha (AlphaUpper E)),SneakUnderscore,SneakAlphaNum (AlphaNumDigit D9)]
+>>> [snakeQ|foo_bar|]
+Snake (SnakeHeadAlpha (AlphaLower F_)) [SnakeAlphaNum (AlphaNumAlpha (AlphaLower O_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower O_)),SnakeUnderscore,SnakeAlphaNum (AlphaNumAlpha (AlphaLower B_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower A_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower R_))]
+>>> [snakeQ|__constructor|]
+Snake SnakeHeadUnderscore [SnakeUnderscore,SnakeAlphaNum (AlphaNumAlpha (AlphaLower C_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower O_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower N_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower S_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower T_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower R_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower U_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower C_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower T_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower O_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower R_))]
+>>> [snakeQ|FOO_MEE_9|]
+Snake (SnakeHeadAlpha (AlphaUpper F)) [SnakeAlphaNum (AlphaNumAlpha (AlphaUpper O)),SnakeAlphaNum (AlphaNumAlpha (AlphaUpper O)),SnakeUnderscore,SnakeAlphaNum (AlphaNumAlpha (AlphaUpper M)),SnakeAlphaNum (AlphaNumAlpha (AlphaUpper E)),SnakeAlphaNum (AlphaNumAlpha (AlphaUpper E)),SnakeUnderscore,SnakeAlphaNum (AlphaNumDigit D9)]
 
 >>> [lowerStringQ|imavimmer|]
 LowerString I_ [M_,A_,V_,I_,M_,M_,E_,R_]
@@ -131,10 +131,10 @@ error:
     • nonEmptyQ required a non empty string, but the empty string is specified.
     • In the quasi-quotation: [nonEmptyQ||]
 
->>> [camelQ|sneak_case|]
+>>> [camelQ|snake_case|]
 error:
     • ''_'' is not an AlphaNumChar.
-    • In the quasi-quotation: [camelQ|sneak_case|]
+    • In the quasi-quotation: [camelQ|snake_case|]
 
 >>> [lowerStringQ|Upper|]
 error:
