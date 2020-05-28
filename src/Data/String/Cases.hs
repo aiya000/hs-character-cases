@@ -189,6 +189,51 @@ snakeQ = QuasiQuoter
       pure $ ConE (mkName "Snake") `AppE` z `AppE` ListE zs
 
 
+-- | A kind of Snake. "[A-Z_][A-Z0-9_]*"
+data UpperSnake = UpperSnake UpperSnakeHeadChar [UpperSnakeChar]
+  deriving (Show, Eq)
+
+instance Pretty UpperSnake where
+  pretty = String.fromString . unUpperSnake
+
+unUpperSnake :: UpperSnake -> String
+unUpperSnake (UpperSnake x xs) =
+  unUpperSnakeHeadChar x : map unUpperSnakeChar xs
+
+parseUpperSnake :: CodeParsing m => m UpperSnake
+parseUpperSnake =
+  UpperSnake <$>
+  upperSnakeHeadChar <*>
+  P.many upperSnakeChar
+
+-- |
+-- >>> [upperSnakeQ|FOO_BAR|]
+-- UpperSnake (UpperSnakeHeadUpper F) [UpperSnakeUpper O,UpperSnakeUpper O,UpperSnakeUnderscore,UpperSnakeUpper B,UpperSnakeUpper A,UpperSnakeUpper R]
+--
+-- >>> [upperSnakeQ|__CONSTRUCTOR|]
+-- UpperSnake UpperSnakeHeadUnderscore [UpperSnakeUnderscore,UpperSnakeUpper C,UpperSnakeUpper O,UpperSnakeUpper N,UpperSnakeUpper S,UpperSnakeUpper T,UpperSnakeUpper R,UpperSnakeUpper U,UpperSnakeUpper C,UpperSnakeUpper T,UpperSnakeUpper O,UpperSnakeUpper R]
+--
+-- >>> [upperSnakeQ|__FOO_MEE_9|]
+-- UpperSnake UpperSnakeHeadUnderscore [UpperSnakeUnderscore,UpperSnakeUpper F,UpperSnakeUpper O,UpperSnakeUpper O,UpperSnakeUnderscore,UpperSnakeUpper M,UpperSnakeUpper E,UpperSnakeUpper E,UpperSnakeUnderscore,UpperSnakeDigit D9]
+--
+-- >>> [upperSnakeQ|FOO_MEE_9|]
+-- UpperSnake (UpperSnakeHeadUpper F) [UpperSnakeUpper O,UpperSnakeUpper O,UpperSnakeUnderscore,UpperSnakeUpper M,UpperSnakeUpper E,UpperSnakeUpper E,UpperSnakeUnderscore,UpperSnakeDigit D9]
+upperSnakeQ :: QuasiQuoter
+upperSnakeQ = QuasiQuoter
+  { quoteExp  = expQ
+  , quotePat  = error "not supported"
+  , quoteType = error "not supported"
+  , quoteDec  = error "not supported"
+  }
+  where
+    expQ :: String -> Q Exp
+    expQ [] = fail "upperSnakeQ required a non empty string, but the empty string is specified."
+    expQ (x : xs) = do
+      z <- (quoteExp upperSnakeHeadCharQ) [x]
+      zs <- mapM (quoteExp upperSnakeCharQ) $ map (: []) xs
+      pure $ ConE (mkName "UpperSnake") `AppE` z `AppE` ListE zs
+
+
 -- | Non empty "veryflatten" names [a-z]+
 data LowerString = LowerString LowerChar [LowerChar]
   deriving (Show, Eq)

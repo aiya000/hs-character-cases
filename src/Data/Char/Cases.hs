@@ -394,3 +394,107 @@ snakeHeadCharQ = QuasiQuoter
         (ConE (mkName "SnakeHeadAlpha") `AppE`) <$> (quoteExp alphaCharQ) [x]
 
     expQ xs@(_ : _) = fail [i|snakeHeadCharQ required a Char, but a String is specified: ${xs}|]
+
+
+-- |
+-- [A-Z_]
+--
+-- Please sese 'UpperSnake'.
+data UpperSnakeHeadChar = UpperSnakeHeadUnderscore -- ^ _
+                        | UpperSnakeHeadUpper UpperChar -- ^ [A-Z]
+  deriving (Show, Eq)
+
+unUpperSnakeHeadChar :: UpperSnakeHeadChar -> Char
+unUpperSnakeHeadChar UpperSnakeHeadUnderscore = '_'
+unUpperSnakeHeadChar (UpperSnakeHeadUpper x) = upperToChar x
+
+upperSnakeHeadChar :: CodeParsing m => m UpperSnakeHeadChar
+upperSnakeHeadChar =
+  UpperSnakeHeadUnderscore <$ P.char '_' <|>
+  UpperSnakeHeadUpper <$> upperChar
+
+charToUpperSnakeHead :: Char -> Maybe UpperSnakeHeadChar
+charToUpperSnakeHead x = P.parseMaybe upperSnakeHeadChar [x]
+
+-- |
+-- >>> [upperSnakeHeadCharQ|_|]
+-- UpperSnakeHeadUnderscore
+--
+-- >>> [upperSnakeHeadCharQ|A|]
+-- UpperSnakeHeadUpper A
+upperSnakeHeadCharQ :: QuasiQuoter
+upperSnakeHeadCharQ = QuasiQuoter
+  { quoteExp  = expQ
+  , quotePat  = error "not supported"
+  , quoteType = error "not supported"
+  , quoteDec  = error "not supported"
+  }
+  where
+    expQ :: String -> Q Exp
+    expQ [] = fail "upperSnakeHeadCharQ required a Char, but nothign is specified."
+
+    expQ (x : []) = case charToUpperSnakeHead x of
+      Nothing ->
+        fail [i|'${x}' is not a UpperSnakeHeadChar.|]
+      Just UpperSnakeHeadUnderscore ->
+        conE $ mkName "UpperSnakeHeadUnderscore"
+      Just (UpperSnakeHeadUpper _) ->
+        (ConE (mkName "UpperSnakeHeadUpper") `AppE`) <$> (quoteExp upperCharQ) [x]
+
+    expQ xs@(_ : _) = fail [i|upperSnakeHeadCharQ required a Char, but a String is specified: ${xs}|]
+
+
+-- |
+-- [A-Z0-9_]
+--
+-- Please see 'Snake'.
+data UpperSnakeChar = UpperSnakeUnderscore -- ^ _
+                    | UpperSnakeUpper UpperChar -- ^ [A-Z]
+                    | UpperSnakeDigit DigitChar  -- ^ [0-9]
+  deriving (Show, Eq)
+
+unUpperSnakeChar :: UpperSnakeChar -> Char
+unUpperSnakeChar UpperSnakeUnderscore = '_'
+unUpperSnakeChar (UpperSnakeUpper x) = upperToChar x
+unUpperSnakeChar (UpperSnakeDigit x) = digitToChar x
+
+upperSnakeChar :: CodeParsing m => m UpperSnakeChar
+upperSnakeChar =
+  UpperSnakeUnderscore <$ P.char '_' <|>
+  UpperSnakeUpper <$> upperChar <|>
+  UpperSnakeDigit <$> digitChar
+
+charToUpperSnake :: Char -> Maybe UpperSnakeChar
+charToUpperSnake x = P.parseMaybe upperSnakeChar [x]
+
+-- |
+-- >>> [upperSnakeCharQ|_|]
+-- UpperSnakeUnderscore
+--
+-- >>> [upperSnakeCharQ|A|]
+-- UpperSnakeUpper A
+--
+-- >>> [upperSnakeCharQ|0|]
+-- UpperSnakeDigit D0
+upperSnakeCharQ :: QuasiQuoter
+upperSnakeCharQ = QuasiQuoter
+  { quoteExp  = expQ
+  , quotePat  = error "not supported"
+  , quoteType = error "not supported"
+  , quoteDec  = error "not supported"
+  }
+  where
+    expQ :: String -> Q Exp
+    expQ [] = fail "upperSnakeCharQ required a Char, but nothign is specified."
+
+    expQ (x : []) = case charToUpperSnake x of
+      Nothing ->
+        fail [i|'${x}' is not a UpperSnakeChar.|]
+      Just UpperSnakeUnderscore ->
+        conE $ mkName "UpperSnakeUnderscore"
+      Just (UpperSnakeUpper _) ->
+        (ConE (mkName "UpperSnakeUpper") `AppE`) <$> (quoteExp upperCharQ) [x]
+      Just (UpperSnakeDigit _) ->
+        (ConE (mkName "UpperSnakeDigit") `AppE`) <$> (quoteExp digitCharQ) [x]
+
+    expQ xs@(_ : _) = fail [i|upperSnakeCharQ required a Char, but a String is specified: ${xs}|]
