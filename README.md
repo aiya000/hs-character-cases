@@ -1,78 +1,94 @@
 # :diamond_shape_with_a_dot_inside: character-cases :diamond_shape_with_a_dot_inside:
 
+[![](https://img.shields.io/hackage/v/character-cases)](https://hackage.haskell.org/package/character-cases)
+
 A Haskell library for subspecies types of Char, and naming cases.
 
-- Subspecies types (Char like)
-    - lower `[a-z]`
-    - Upper `[A-Z]`
-    - numbers `[0-9]`
-    - or these combinations. e.g. `[a-zA-Z]`, `[a-zA-Z0-9]`.
-
 - Naming cases (String like)
-    - PascalCase `[A-Z][A-Za-z0-9]*`
-    - camelCase `[a-zA-Z][a-zA-Z0-9]*`
-    - snake_case `[a-zA-Z_][a-zA-Z0-9_]*`
 
 ```haskell
-data UpperChar = A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z
+-- | [A-Z][a-zA-Z0-9]*
+data Pascal = Pascal UpperChar [AlphaNumChar]
+  deriving (Show, Eq)
+
+-- | [a-z][a-zA-Z0-9]*
+data Camel = Camel AlphaChar [AlphaNumChar]
+  deriving (Eq)
+
+-- | [a-zA-Z_][a-zA-Z0-9_]*
+data Snake = Snake SnakeHeadChar [SnakeChar]
+  deriving (Show, Eq)
+
+-- | [A-Z_][A-Z0-9_]*
+data UpperSnake = UpperSnake UpperSnakeHeadChar [UpperSnakeChar]
+  deriving (Show, Eq)
+
+-- | [a-z]+
+data LowerString = LowerString LowerChar [LowerChar]
+  deriving (Show, Eq)
+
+-- | .+
+data NonEmpty = NonEmpty Char String
+  deriving (Show, Eq)
+```
+
+- Subspecies types (Char like)
+
+```haskell
+-- | [A-Z]
+data UpperChar = ...
   deriving (Show, Eq, Ord)
 
-data LowerChar = A_ | B_ | C_ | D_ | E_ | F_ | G_ | H_ | I_ | J_ | K_ | L_ | M_ | N_ | O_ | P_ | Q_ | R_ | S_ | T_ | U_ | V_ | W_ | X_ | Y_ | Z_
+-- | [a-z]
+data LowerChar = ...
   deriving (Show, Eq, Ord)
 
-data DigitChar = D0 | D1 | D2 | D3 | D4 | D5 | D6 | D7 | D8 | D9
+-- | [0-9]
+data DigitChar = ...
   deriving (Show, Eq, Ord)
 
-data AlphaChar = AlphaLower LowerChar
-               | AlphaUpper UpperChar
+-- | [A-Za-z]
+data AlphaChar = ...
   deriving (Show, Eq, Ord)
 
-data AlphaNumChar = AlphaNumAlpha AlphaChar
-                  | AlphaNumDigit DigitChar
+-- | [A-Za-z0-9]
+data AlphaNumChar = ...
   deriving (Show, Eq, Ord)
 ```
 
 ## Why we use this?
 
-I'm developping a software, that is a program compiler.
+**Make impossible things to impossible** to strict `data` driven programming.
 
-I really want to separate Char cases, and naming cases.
-But the way was not prepared.
+For example, in the first place,
 
-Now, we can use a lot of Char cases and naming cases, by this library.
+- `List.NonEmpty a` wont be the empty list `[]`
+
+also
+
+- `Pascal` wont be other than `[A-Z][a-zA-Z0-9]*`
+- `Camel` wont be other than `[a-z][a-zA-Z0-9]*`
+- ...
+
+These are useful in
+
+- Abstract Syntax Tree (Identifiers)
+- ...
+
+**Make impossible things to impossible.**
 
 ## Usage
+
+- [character-cases - Hackage](https://hackage.haskell.org/package/character-cases)
+
+- [Data.Char.Cases](https://github.com/aiya000/hs-character-cases/blob/master/src/Data/Char/Cases.hs)
+- [Data.String.Cases](https://github.com/aiya000/hs-character-cases/blob/master/src/Data/String/Cases.hs)
 
 ### `QuasiQuoter`s
 
 That ADT can be used directly, but `QuasiQuoter`s is more useful.
 
-Characters
-
-```haskell
->>> [upperCharQ|X|]
-X
-
->>> [lowerCharQ|x|]
-X_
-
->>> [digitCharQ|0|]
-D0
-
->>> [alphaNumCharQ|X|]
-AlphaNumAlpha (AlphaUpper X)
-
->>> [alphaNumCharQ|x|]
-AlphaNumAlpha (AlphaLower X_)
-
->>> [alphaNumCharQ|0|]
-AlphaNumDigit D0
-
->>> [snakeCharQ|_|]
-SnakeUnderscore
-```
-
-Naming cases
+- Naming cases
 
 ```haskell
 >>> [pascalQ|Pascal|]
@@ -101,7 +117,32 @@ Snake (SnakeHeadAlpha (AlphaUpper F)) [SnakeAlphaNum (AlphaNumAlpha (AlphaUpper 
 LowerString I_ [M_,A_,V_,I_,M_,M_,E_,R_]
 ```
 
-Wrong cases will be rejected on the compile time!
+- Characters
+
+```haskell
+>>> [upperCharQ|X|]
+X
+
+>>> [lowerCharQ|x|]
+X_
+
+>>> [digitCharQ|0|]
+D0
+
+>>> [alphaNumCharQ|X|]
+AlphaNumAlpha (AlphaUpper X)
+
+>>> [alphaNumCharQ|x|]
+AlphaNumAlpha (AlphaLower X_)
+
+>>> [alphaNumCharQ|0|]
+AlphaNumDigit D0
+
+>>> [snakeCharQ|_|]
+SnakeUnderscore
+```
+
+Wrong cases will be rejected on **the compile time**!
 
 ```haskell
 >>> [upperCharQ|x|]
@@ -154,7 +195,3 @@ And we can use it as parser combinators.
 Please see modules and documents.
 
 - [character-cases - Hackage](https://hackage.haskell.org/package/character-cases)
-
-- - - - -
-
-Thanks.
