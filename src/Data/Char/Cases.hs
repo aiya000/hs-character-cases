@@ -2,8 +2,54 @@
 
 -- |
 -- Exposes subspecies types of Char.
--- e.g. [a-z], [A-Z], and [0-9].
-module Data.Char.Cases where
+-- e.g. `[a-z]`, `[A-Z]`, and `[0-9]`.
+module Data.Char.Cases
+  ( AlphaNumChar (..)
+  , alphaNumToChar
+  , alphaNumChar
+  , charToAlphaNum
+  , alphaNumCharQ
+  , AlphaChar (..)
+  , alphaToChar
+  , charToAlpha
+  , alphaChar
+  , alphaCharQ
+  , UpperChar (..)
+  , upperToChar
+  , upperChar
+  , charToUpper
+  , upperCharQ
+  , LowerChar (..)
+  , lowerToChar
+  , lowerChar
+  , charToLower
+  , lowerCharQ
+  , DigitChar (..)
+  , digitToChar
+  , digitChar
+  , charToDigit
+  , digitCharQ
+  , SnakeChar (..)
+  , snakeToChar
+  , snakeChar
+  , charToSnake
+  , snakeCharQ
+  , SnakeHeadChar (..)
+  , snakeHeadToChar
+  , snakeHeadChar
+  , charToSnakeHead
+  , snakeHeadCharQ
+  , UpperSnakeHeadChar (..)
+  , upperSnakeHeadToChar
+  , upperSnakeHeadChar
+  , charToUpperSnakeHead
+  , upperSnakeHeadCharQ
+  , UpperSnakeChar (..)
+  , upperSnakeToChar
+  , upperSnakeChar
+  , charToUpperSnake
+  , upperSnakeCharQ
+  ) where
 
 import Cases.Megaparsec
 import Control.Applicative
@@ -25,6 +71,7 @@ dual (Map.toList -> x) =
   Map.fromList $ map swap x
 
 
+-- | '[A-Za-z0-9]'
 data AlphaNumChar = AlphaNumAlpha AlphaChar
                   | AlphaNumDigit DigitChar
   deriving (Show, Eq, Ord)
@@ -73,6 +120,7 @@ alphaNumCharQ = QuasiQuoter
     expQ xs@(_ : _) = fail [i|alphaNumCharQ required a Char, but a String is specified: ${xs}|]
 
 
+-- | '[A-Za-z]'
 data AlphaChar = AlphaLower LowerChar
                | AlphaUpper UpperChar
   deriving (Show, Eq, Ord)
@@ -111,6 +159,7 @@ alphaCharQ = QuasiQuoter
     expQ xs@(_ : _) = fail [i|alphaCharQ required a Char, but a String is specified: ${xs}|]
 
 
+-- | '[A-Z]'
 data UpperChar = A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z
   deriving (Show, Eq, Ord)
 
@@ -168,6 +217,7 @@ upperCharQ = QuasiQuoter
     expQ xs@(_ : _) = fail [i|upperCharQ required a Char, but a String is specified: ${xs}|]
 
 
+-- | '[a-z]'
 data LowerChar = A_ | B_ | C_ | D_ | E_ | F_ | G_ | H_ | I_ | J_ | K_ | L_ | M_ | N_ | O_ | P_ | Q_ | R_ | S_ | T_ | U_ | V_ | W_ | X_ | Y_ | Z_
   deriving (Show, Eq, Ord)
 
@@ -225,7 +275,7 @@ lowerCharQ = QuasiQuoter
     expQ xs@(_ : _) = fail [i|lowerCharQ required a Char, but a String is specified: ${xs}|]
 
 
--- | [0-9]
+-- | '[0-9]'
 data DigitChar = D0
                | D1
                | D2
@@ -288,16 +338,16 @@ digitCharQ = QuasiQuoter
 
 
 -- |
--- [a-zA-Z0-9_]
+-- '[a-zA-Z0-9_]'
 --
 -- Please see 'Snake'.
 data SnakeChar = SnakeUnderscore -- ^ _
                | SnakeAlphaNum AlphaNumChar -- ^ [a-zA-Z0-9]
   deriving (Show, Eq)
 
-unSnakeChar :: SnakeChar -> Char
-unSnakeChar SnakeUnderscore = '_'
-unSnakeChar (SnakeAlphaNum x) = alphaNumToChar x
+snakeToChar :: SnakeChar -> Char
+snakeToChar SnakeUnderscore = '_'
+snakeToChar (SnakeAlphaNum x) = alphaNumToChar x
 
 snakeChar :: CodeParsing m => m SnakeChar
 snakeChar =
@@ -344,16 +394,16 @@ snakeCharQ = QuasiQuoter
 
 
 -- |
--- [a-zA-Z_]
+-- '[a-zA-Z_]'
 --
 -- Please see 'Snake'.
 data SnakeHeadChar = SnakeHeadUnderscore
                    | SnakeHeadAlpha AlphaChar
   deriving (Show, Eq)
 
-unSnakeHeadChar :: SnakeHeadChar -> Char
-unSnakeHeadChar SnakeHeadUnderscore = '_'
-unSnakeHeadChar (SnakeHeadAlpha x) = alphaToChar x
+snakeHeadToChar :: SnakeHeadChar -> Char
+snakeHeadToChar SnakeHeadUnderscore = '_'
+snakeHeadToChar (SnakeHeadAlpha x) = alphaToChar x
 
 snakeHeadChar :: CodeParsing m => m SnakeHeadChar
 snakeHeadChar =
@@ -397,16 +447,16 @@ snakeHeadCharQ = QuasiQuoter
 
 
 -- |
--- [A-Z_]
+-- '[A-Z_]'
 --
 -- Please sese 'UpperSnake'.
 data UpperSnakeHeadChar = UpperSnakeHeadUnderscore -- ^ _
                         | UpperSnakeHeadUpper UpperChar -- ^ [A-Z]
   deriving (Show, Eq)
 
-unUpperSnakeHeadChar :: UpperSnakeHeadChar -> Char
-unUpperSnakeHeadChar UpperSnakeHeadUnderscore = '_'
-unUpperSnakeHeadChar (UpperSnakeHeadUpper x) = upperToChar x
+upperSnakeHeadToChar :: UpperSnakeHeadChar -> Char
+upperSnakeHeadToChar UpperSnakeHeadUnderscore = '_'
+upperSnakeHeadToChar (UpperSnakeHeadUpper x) = upperToChar x
 
 upperSnakeHeadChar :: CodeParsing m => m UpperSnakeHeadChar
 upperSnakeHeadChar =
@@ -445,7 +495,7 @@ upperSnakeHeadCharQ = QuasiQuoter
 
 
 -- |
--- [A-Z0-9_]
+-- '[A-Z0-9_]'
 --
 -- Please see 'Snake'.
 data UpperSnakeChar = UpperSnakeUnderscore -- ^ _
@@ -453,10 +503,10 @@ data UpperSnakeChar = UpperSnakeUnderscore -- ^ _
                     | UpperSnakeDigit DigitChar  -- ^ [0-9]
   deriving (Show, Eq)
 
-unUpperSnakeChar :: UpperSnakeChar -> Char
-unUpperSnakeChar UpperSnakeUnderscore = '_'
-unUpperSnakeChar (UpperSnakeUpper x) = upperToChar x
-unUpperSnakeChar (UpperSnakeDigit x) = digitToChar x
+upperSnakeToChar :: UpperSnakeChar -> Char
+upperSnakeToChar UpperSnakeUnderscore = '_'
+upperSnakeToChar (UpperSnakeUpper x) = upperToChar x
+upperSnakeToChar (UpperSnakeDigit x) = digitToChar x
 
 upperSnakeChar :: CodeParsing m => m UpperSnakeChar
 upperSnakeChar =

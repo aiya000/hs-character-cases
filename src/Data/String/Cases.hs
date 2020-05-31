@@ -147,7 +147,7 @@ instance Pretty Snake where
 
 unSnake :: Snake -> String
 unSnake (Snake x xs) =
-  unSnakeHeadChar x : map unSnakeChar xs
+  snakeHeadToChar x : map snakeToChar xs
 
 parseSnake :: CodeParsing m => m Snake
 parseSnake =
@@ -192,7 +192,7 @@ instance Pretty UpperSnake where
 
 unUpperSnake :: UpperSnake -> String
 unUpperSnake (UpperSnake x xs) =
-  unUpperSnakeHeadChar x : map unUpperSnakeChar xs
+  upperSnakeHeadToChar x : map upperSnakeToChar xs
 
 parseUpperSnake :: CodeParsing m => m UpperSnake
 parseUpperSnake =
