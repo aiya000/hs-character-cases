@@ -56,7 +56,6 @@ import Control.Applicative
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromJust)
-import Data.String.Here (i)
 import Data.Tuple (swap)
 import Language.Haskell.TH
 import Language.Haskell.TH.Quote (QuasiQuoter(..))
@@ -111,13 +110,13 @@ alphaNumCharQ = QuasiQuoter
     expQ [] = fail "alphaNumCharQ required a Char, but nothign is specified."
 
     expQ (x : []) = case charToAlphaNum x of
-      Nothing -> fail [i|'${x}' is not an AlphaNumChar.|]
+      Nothing -> fail $ show x <> " is not an AlphaNumChar."
       Just (AlphaNumAlpha _) ->
         (ConE (mkName "AlphaNumAlpha") `AppE`) <$> (quoteExp alphaCharQ) [x]
       Just (AlphaNumDigit _) ->
         (ConE (mkName "AlphaNumDigit") `AppE`) <$> (quoteExp digitCharQ) [x]
 
-    expQ xs@(_ : _) = fail [i|alphaNumCharQ required a Char, but a String is specified: ${xs}|]
+    expQ xs@(_ : _) = fail $ "alphaNumCharQ required a Char, but a String is specified: " <> xs
 
 
 -- | '[A-Za-z]'
@@ -150,13 +149,13 @@ alphaCharQ = QuasiQuoter
     expQ [] = fail "alphaCharQ required a Char, but nothign is specified."
 
     expQ (x : []) = case charToAlpha x of
-      Nothing -> fail [i|'${x}' is not an AlphaChar.|]
+      Nothing -> fail $ show x <> " is not an AlphaChar."
       Just (AlphaLower _) ->
         (ConE (mkName "AlphaLower") `AppE`) <$> (quoteExp lowerCharQ) [x]
       Just (AlphaUpper _) ->
         (ConE (mkName "AlphaUpper") `AppE`) <$> (quoteExp upperCharQ) [x]
 
-    expQ xs@(_ : _) = fail [i|alphaCharQ required a Char, but a String is specified: ${xs}|]
+    expQ xs@(_ : _) = fail $ "alphaCharQ required a Char, but a String is specified: " <> xs
 
 
 -- | '[A-Z]'
@@ -211,10 +210,10 @@ upperCharQ = QuasiQuoter
     expQ [] = fail "upperCharQ required a Char, but nothign is specified."
 
     expQ (x : []) = case charToUpper x of
-      Nothing -> fail [i|'${x}' is not an UpperChar.|]
+      Nothing -> fail $ show x <> " is not an UpperChar."
       Just z -> conE . mkName $ show z
 
-    expQ xs@(_ : _) = fail [i|upperCharQ required a Char, but a String is specified: ${xs}|]
+    expQ xs@(_ : _) = fail $ "upperCharQ required a Char, but a String is specified: " <> xs
 
 
 -- | '[a-z]'
@@ -269,10 +268,10 @@ lowerCharQ = QuasiQuoter
     expQ [] = fail "lowerCharQ required a Char, but nothign is specified."
 
     expQ (x : []) = case charToLower x of
-      Nothing -> fail [i|'${x}' is not a LowerChar.|]
+      Nothing -> fail $ show x <> " is not a LowerChar."
       Just z -> conE . mkName $ show z
 
-    expQ xs@(_ : _) = fail [i|lowerCharQ required a Char, but a String is specified: ${xs}|]
+    expQ xs@(_ : _) = fail $ "lowerCharQ required a Char, but a String is specified: " <> xs
 
 
 -- | '[0-9]'
@@ -331,10 +330,10 @@ digitCharQ = QuasiQuoter
     expQ [] = fail "digitCharQ required a Char, but nothign is specified."
 
     expQ (x : []) = case charToDigit x of
-      Nothing -> fail [i|'${x}' is not a DigitChar.|]
+      Nothing -> fail $ show x <> " is not a DigitChar."
       Just z -> conE . mkName $ show z
 
-    expQ xs@(_ : _) = fail [i|digitCharQ required a Char, but a String is specified: ${xs}|]
+    expQ xs@(_ : _) = fail $ "digitCharQ required a Char, but a String is specified: " <> xs
 
 
 -- |
@@ -384,13 +383,13 @@ snakeCharQ = QuasiQuoter
     expQ [] = fail "snakeCharQ required a Char, but nothign is specified."
 
     expQ (x : []) = case charToSnake x of
-      Nothing -> fail [i|'${x}' is not a SnakeChar.|]
+      Nothing -> fail $ show x <> " is not a SnakeChar."
       Just SnakeUnderscore ->
         conE $ mkName "SnakeUnderscore"
       Just (SnakeAlphaNum _) ->
         (ConE (mkName "SnakeAlphaNum") `AppE`) <$> (quoteExp alphaNumCharQ) [x]
 
-    expQ xs@(_ : _) = fail [i|snakeCharQ required a Char, but a String is specified: ${xs}|]
+    expQ xs@(_ : _) = fail $ "snakeCharQ required a Char, but a String is specified: " <> xs
 
 
 -- |
@@ -437,13 +436,13 @@ snakeHeadCharQ = QuasiQuoter
     expQ [] = fail "snakeHeadCharQ required a Char, but nothign is specified."
 
     expQ (x : []) = case charToSnakeHead x of
-      Nothing -> fail [i|'${x}' is not a SnakeHeadChar.|]
+      Nothing -> fail $ show x <> " is not a SnakeHeadChar."
       Just SnakeHeadUnderscore ->
         conE $ mkName "SnakeHeadUnderscore"
       Just (SnakeHeadAlpha _) ->
         (ConE (mkName "SnakeHeadAlpha") `AppE`) <$> (quoteExp alphaCharQ) [x]
 
-    expQ xs@(_ : _) = fail [i|snakeHeadCharQ required a Char, but a String is specified: ${xs}|]
+    expQ xs@(_ : _) = fail $ "snakeHeadCharQ required a Char, but a String is specified: " <> xs
 
 
 -- |
@@ -485,13 +484,13 @@ upperSnakeHeadCharQ = QuasiQuoter
 
     expQ (x : []) = case charToUpperSnakeHead x of
       Nothing ->
-        fail [i|'${x}' is not a UpperSnakeHeadChar.|]
+        fail $ show x <> " is not a UpperSnakeHeadChar."
       Just UpperSnakeHeadUnderscore ->
         conE $ mkName "UpperSnakeHeadUnderscore"
       Just (UpperSnakeHeadUpper _) ->
         (ConE (mkName "UpperSnakeHeadUpper") `AppE`) <$> (quoteExp upperCharQ) [x]
 
-    expQ xs@(_ : _) = fail [i|upperSnakeHeadCharQ required a Char, but a String is specified: ${xs}|]
+    expQ xs@(_ : _) = fail $ "upperSnakeHeadCharQ required a Char, but a String is specified: " <> xs
 
 
 -- |
@@ -539,7 +538,7 @@ upperSnakeCharQ = QuasiQuoter
 
     expQ (x : []) = case charToUpperSnake x of
       Nothing ->
-        fail [i|'${x}' is not a UpperSnakeChar.|]
+        fail $ show x <> " is not a UpperSnakeChar."
       Just UpperSnakeUnderscore ->
         conE $ mkName "UpperSnakeUnderscore"
       Just (UpperSnakeUpper _) ->
@@ -547,4 +546,4 @@ upperSnakeCharQ = QuasiQuoter
       Just (UpperSnakeDigit _) ->
         (ConE (mkName "UpperSnakeDigit") `AppE`) <$> (quoteExp digitCharQ) [x]
 
-    expQ xs@(_ : _) = fail [i|upperSnakeCharQ required a Char, but a String is specified: ${xs}|]
+    expQ xs@(_ : _) = fail $ "upperSnakeCharQ required a Char, but a String is specified: " <> xs
