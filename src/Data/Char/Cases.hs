@@ -339,7 +339,7 @@ digitCharQ = QuasiQuoter
 -- |
 -- '[a-zA-Z0-9_]'
 --
--- Please see 'Snake'.
+-- Please see 'Data.String.Cases.Snake'.
 data SnakeChar = SnakeUnderscore -- ^ _
                | SnakeAlphaNum AlphaNumChar -- ^ [a-zA-Z0-9]
   deriving (Show, Eq)
@@ -395,7 +395,7 @@ snakeCharQ = QuasiQuoter
 -- |
 -- '[a-zA-Z_]'
 --
--- Please see 'Snake'.
+-- Please see 'Data.String.Cases.Snake'.
 data SnakeHeadChar = SnakeHeadUnderscore
                    | SnakeHeadAlpha AlphaChar
   deriving (Show, Eq)
@@ -448,7 +448,7 @@ snakeHeadCharQ = QuasiQuoter
 -- |
 -- '[A-Z_]'
 --
--- Please sese 'UpperSnake'.
+-- Please sese 'Data.String.Cases.UpperSnake'.
 data UpperSnakeHeadChar = UpperSnakeHeadUnderscore -- ^ _
                         | UpperSnakeHeadUpper UpperChar -- ^ [A-Z]
   deriving (Show, Eq)
@@ -496,7 +496,7 @@ upperSnakeHeadCharQ = QuasiQuoter
 -- |
 -- '[A-Z0-9_]'
 --
--- Please see 'Snake'.
+-- Please see 'Data.String.Cases.UpperSnake'.
 data UpperSnakeChar = UpperSnakeUnderscore -- ^ _
                     | UpperSnakeUpper UpperChar -- ^ [A-Z]
                     | UpperSnakeDigit DigitChar  -- ^ [0-9]

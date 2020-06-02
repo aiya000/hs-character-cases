@@ -157,7 +157,7 @@ parseSnake =
 
 -- |
 -- Simular to 'nonEmptyQ',
--- but naming outsides of 'Snake' will be rejected.
+-- but naming outsides of 'Data.String.Cases.Snake' will be rejected.
 --
 -- >>> [snakeQ|foo_bar|]
 -- Snake (SnakeHeadAlpha (AlphaLower F_)) [SnakeAlphaNum (AlphaNumAlpha (AlphaLower O_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower O_)),SnakeUnderscore,SnakeAlphaNum (AlphaNumAlpha (AlphaLower B_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower A_)),SnakeAlphaNum (AlphaNumAlpha (AlphaLower R_))]
@@ -183,7 +183,7 @@ snakeQ = QuasiQuoter
       pure $ ConE (mkName "Snake") `AppE` z `AppE` ListE zs
 
 
--- | A kind of Snake. "[A-Z_][A-Z0-9_]*"
+-- | A kind of 'Data.String.Cases'. @[A-Z_][A-Z0-9_]*@
 data UpperSnake = UpperSnake UpperSnakeHeadChar [UpperSnakeChar]
   deriving (Show, Eq)
 
